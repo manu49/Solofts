@@ -1,282 +1,412 @@
-# SOLOFTS — UNACCOMPANIED Setup Guide
-## Complete Step-by-Step: Backend → Frontend → Deployment
+# 🚀 UNACCOMPANIED — Full Setup Guide
+
+Complete step-by-step instructions: Supabase → Local Dev → Vercel → iOS path.
 
 ---
 
-## 🗂️ Project Structure
-
-```
-Solofts/
-├── apps/
-│   └── web/               ← Next.js 14 app (React, TypeScript, Tailwind)
-│       ├── app/           ← App Router pages
-│       ├── components/    ← Reusable UI components
-│       ├── lib/           ← Supabase client, utilities
-│       └── styles/        ← Global CSS
-├── supabase/
-│   └── migrations/        ← SQL schema + seed data
-├── docs/
-├── vercel.json            ← Vercel deployment config
-└── SETUP.md               ← This file
-```
+## Table of Contents
+1. [Prerequisites](#1-prerequisites)
+2. [Clone & Local Setup](#2-clone--local-setup)
+3. [Supabase Setup (Database + Auth)](#3-supabase-setup)
+4. [Local Development](#4-local-development)
+5. [Vercel Deployment](#5-vercel-deployment)
+6. [Custom Domain](#6-custom-domain)
+7. [Anthropic AI Key (Trip Architect)](#7-anthropic-ai-key)
+8. [Google OAuth](#8-google-oauth)
+9. [Post-Deploy Checklist](#9-post-deploy-checklist)
+10. [iOS App Path](#10-ios-app-path)
+11. [Architecture Reference](#11-architecture-reference)
 
 ---
 
-## PART 1 — SUPABASE BACKEND SETUP
+## 1. Prerequisites
 
-### Step 1: Create a Supabase Project
+Install these before starting:
 
-1. Go to **https://app.supabase.com** → Sign in (or create free account)
-2. Click **"New Project"**
-3. Settings:
-   - **Name:** `solofts`
-   - **Database Password:** generate a strong one — **save it somewhere safe**
-   - **Region:** US East (closest to your users; or whichever you prefer)
-4. Wait ~2 minutes for project to spin up
+```bash
+# Node.js v18+
+node --version   # should be >= 18
 
----
+# Git
+git --version
 
-### Step 2: Run the Database Schema
-
-1. In Supabase dashboard → go to **SQL Editor** (left sidebar, `</>` icon)
-2. Click **"New Query"**
-3. Copy-paste the entire contents of `supabase/migrations/001_initial_schema.sql`
-4. Click **Run** (or Cmd+Enter)
-5. You should see: `Success. No rows returned.`
-
-Then run the seed data:
-1. New query again
-2. Copy-paste `supabase/migrations/002_seed_data.sql`
-3. Run it — this seeds 10 gear items
-
----
-
-### Step 3: Get Your API Keys
-
-1. In Supabase → **Settings** (gear icon) → **API**
-2. Copy these (you'll need them in every environment):
-   - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
-   - **anon / public key** → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - **service_role / secret key** → `SUPABASE_SERVICE_ROLE_KEY` (**never expose this client-side**)
-
----
-
-### Step 4: Enable Authentication Providers
-
-1. Supabase → **Authentication** → **Providers**
-2. **Email** is enabled by default ✓
-3. Enable **Google**:
-   - Go to [Google Cloud Console](https://console.cloud.google.com)
-   - Create/select a project → APIs & Services → Credentials
-   - Create OAuth 2.0 Client ID (Web application type)
-   - Authorized redirect URIs: `https://your-project-ref.supabase.co/auth/v1/callback`
-   - Copy Client ID + Client Secret into Supabase Google provider settings
-4. In Supabase → Authentication → **URL Configuration**:
-   - Site URL: `http://localhost:3000` (dev) / `https://yourdomain.com` (prod)
-   - Redirect URLs: add both `http://localhost:3000/api/auth/callback` and `https://yourdomain.com/api/auth/callback`
-
----
-
-### Step 5: Storage Bucket (for story cover images)
-
-1. Supabase → **Storage** → **New Bucket**
-2. Name: `story-images`
-3. Public: **Yes** (so images render in the app)
-4. Run this in SQL Editor to set upload policy:
-
-```sql
-CREATE POLICY "Auth users can upload images"
-ON storage.objects FOR INSERT
-WITH CHECK (bucket_id = 'story-images' AND auth.role() = 'authenticated');
-
-CREATE POLICY "Images are public"
-ON storage.objects FOR SELECT
-USING (bucket_id = 'story-images');
+# npm (comes with Node)
+npm --version
 ```
 
+You will need accounts at:
+- [github.com](https://github.com) — already have the repo
+- [supabase.com](https://supabase.com) — free tier is enough to start
+- [vercel.com](https://vercel.com) — free tier works
+- [console.anthropic.com](https://console.anthropic.com) — for AI trip planning
+
 ---
 
-## PART 2 — LOCAL DEVELOPMENT
-
-### Step 6: Install Dependencies
+## 2. Clone & Local Setup
 
 ```bash
 # Clone the repo
 git clone https://github.com/manu49/Solofts.git
 cd Solofts
 
-# Install Next.js app dependencies
+# Install root deps
+npm install
+
+# Install web app deps
 cd apps/web
 npm install
-```
 
-### Step 7: Create Your .env.local
-
-```bash
-# In apps/web/ directory
+# Copy env file
 cp .env.example .env.local
 ```
 
-Edit `.env.local` with your real values:
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+You'll fill in `.env.local` in step 3 and 7.
+
+---
+
+## 3. Supabase Setup
+
+### 3a. Create a Project
+
+1. Go to [app.supabase.com](https://app.supabase.com)
+2. Click **New Project**
+3. Name it `unaccompanied` (or anything)
+4. Choose a strong database password — **save it somewhere safe**
+5. Pick a region close to your users (e.g. `us-east-1` for US)
+6. Click **Create new project** — wait ~2 min
+
+### 3b. Run the Database Migrations
+
+1. In the Supabase dashboard, go to **SQL Editor** → **New Query**
+2. Open `supabase/migrations/001_initial_schema.sql` from this repo
+3. Paste the entire contents and click **Run**
+4. Open `supabase/migrations/002_seed_data.sql`
+5. Paste and click **Run** — this seeds gear items
+
+> ✅ You should see tables: `profiles`, `stories`, `safety_reports`, `gear_items`, `gear_reviews`, `trip_plans`, `encounters`, and a view: `city_safety_scores`
+
+### 3c. Add the Materialized View Refresh Function
+
+In SQL Editor, run this additional snippet:
+
+```sql
+-- Function to refresh safety scores (called after each new report)
+create or replace function public.refresh_city_safety_scores()
+returns void language plpgsql security definer
+as $$
+begin
+  refresh materialized view concurrently public.city_safety_scores;
+end;
+$$;
+
+-- Grant execution to authenticated users
+grant execute on function public.refresh_city_safety_scores() to authenticated;
 ```
 
-### Step 8: Run Dev Server
+### 3d. Get Your API Keys
+
+1. In Supabase dashboard → **Project Settings** → **API**
+2. Copy:
+   - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
+   - **anon / public key** → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - **service_role key** (secret!) → `SUPABASE_SERVICE_ROLE_KEY`
+
+### 3e. Configure Auth
+
+1. Supabase dashboard → **Authentication** → **URL Configuration**
+2. Set **Site URL**: `http://localhost:3000` (for dev) / your production URL later
+3. Add to **Redirect URLs**:
+   ```
+   http://localhost:3000/api/auth/callback
+   https://your-domain.com/api/auth/callback
+   ```
+
+### 3f. Fill in .env.local
+
+Edit `apps/web/.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGci...
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+ANTHROPIC_API_KEY=sk-ant-...   # fill in step 7
+```
+
+---
+
+## 4. Local Development
 
 ```bash
-# From apps/web/
+# From the repo root
+cd apps/web
 npm run dev
 ```
 
-Open **http://localhost:3000** — you should see the full UNACCOMPANIED site.
+Open [http://localhost:3000](http://localhost:3000) — you should see the full landing page.
+
+**Test the key flows:**
+- `/` — Landing page with animated hero
+- `/stories` — Story library with filters
+- `/safety` — Safety intelligence page
+- `/gear` — Solo Stack gear rankings
+- `/plan` — AI trip architect
+- `/auth/signup` — Create an account
+- `/dashboard` — Member dashboard (requires auth)
 
 ---
 
-## PART 3 — VERCEL DEPLOYMENT
+## 5. Vercel Deployment
 
-### Step 9: Push to GitHub (if you haven't already)
+### 5a. Install Vercel CLI
+
+```bash
+npm install -g vercel
+vercel login
+```
+
+### 5b. Link the Project
 
 ```bash
 # From repo root
-git add .
-git commit -m "feat: initial UNACCOMPANIED platform"
-git push origin main
+vercel link
+# → Select: Link to existing project? No (create new)
+# → Project name: unaccompanied (or your choice)
+# → Detected framework: Next.js ✓
 ```
 
-### Step 10: Import into Vercel
+### 5c. Add Environment Variables
 
-1. Go to **https://vercel.com** → Log in with GitHub
-2. Click **"Add New Project"** → **"Import Git Repository"**
-3. Find **manu49/Solofts** → click **Import**
-4. Configure:
-   - **Framework Preset:** Next.js (auto-detected)
-   - **Root Directory:** `.` (root)
-   - **Build Command:** `cd apps/web && npm install && npm run build`
-   - **Output Directory:** `apps/web/.next`
-   - **Install Command:** `cd apps/web && npm install`
-
-### Step 11: Add Environment Variables in Vercel
-
-In the Vercel project settings → **Environment Variables**, add all four:
-
-| Name | Value | Environments |
-|------|-------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | your supabase URL | Production, Preview, Development |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | your anon key | Production, Preview, Development |
-| `SUPABASE_SERVICE_ROLE_KEY` | your service role key | Production, Preview, Development |
-| `NEXT_PUBLIC_APP_URL` | `https://your-vercel-url.vercel.app` | Production |
-
-### Step 12: Deploy
-
-Click **Deploy**. Vercel builds and deploys in ~2 minutes.
-
-Your site is live at: `https://solofts.vercel.app` (or your custom domain)
-
----
-
-### Step 13: Update Supabase Auth URL for Production
-
-1. Supabase → Authentication → URL Configuration
-2. Update **Site URL** to: `https://your-vercel-url.vercel.app`
-3. Add **Redirect URL**: `https://your-vercel-url.vercel.app/api/auth/callback`
-
----
-
-## PART 4 — CUSTOM DOMAIN (Optional)
-
-1. Vercel → Project → **Settings → Domains**
-2. Add your domain (e.g. `unaccompanied.com`)
-3. Follow DNS instructions (add CNAME record at your registrar)
-4. Update `NEXT_PUBLIC_APP_URL` env var to your new domain
-5. Update Supabase auth URLs too
-
----
-
-## PART 5 — iOS APP PATH (Future)
-
-This app is built with **Next.js** which gives you two paths to iOS:
-
-### Option A: React Native (Recommended for full native feel)
-- The Supabase backend works 100% with React Native
-- Shared TypeScript types in `apps/web/lib/supabase/database.types.ts`
-- Add `apps/mobile/` folder with Expo
-- Install: `npx create-expo-app apps/mobile --template`
-- Use the same Supabase client pattern
-
-### Option B: Capacitor (Wrap web app)
 ```bash
+# Add each env var as a Vercel secret
+vercel env add NEXT_PUBLIC_SUPABASE_URL
+# paste your value when prompted, select: Production + Preview + Development
+
+vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
+vercel env add SUPABASE_SERVICE_ROLE_KEY
+vercel env add ANTHROPIC_API_KEY
+
+# For APP_URL, add after you have your Vercel domain:
+vercel env add NEXT_PUBLIC_APP_URL
+# value: https://your-app.vercel.app
+```
+
+Or do this in the Vercel dashboard: **Project → Settings → Environment Variables**
+
+### 5d. Deploy
+
+```bash
+# Deploy to production
+vercel --prod
+```
+
+Vercel will build and give you a URL like `https://unaccompanied-xxxx.vercel.app`.
+
+### 5e. Update Supabase with Production URL
+
+1. Supabase → **Authentication** → **URL Configuration**
+2. Update **Site URL** to your Vercel URL
+3. Add to **Redirect URLs**: `https://your-app.vercel.app/api/auth/callback`
+
+### 5f. Future Deploys via GitHub (recommended)
+
+1. Push to `main` → Vercel auto-deploys
+2. In Vercel dashboard → **Settings** → **Git** → connect to `github.com/manu49/Solofts`
+3. Set **Root Directory**: `.` (repo root — vercel.json handles the rest)
+
+---
+
+## 6. Custom Domain
+
+1. Buy a domain (e.g. `unaccompanied.com`) at Namecheap, Cloudflare, etc.
+2. In Vercel dashboard → **Project → Settings → Domains**
+3. Add your domain → follow DNS instructions (usually CNAME or A record)
+4. DNS propagation takes 5 min – 48 hours
+5. Update Supabase redirect URLs with the new domain
+
+---
+
+## 7. Anthropic AI Key
+
+The **Trip Architect** (`/plan`) uses Claude to generate real itineraries.
+
+1. Go to [console.anthropic.com](https://console.anthropic.com)
+2. Create account → **API Keys** → **Create Key**
+3. Copy the key (starts with `sk-ant-...`)
+4. Add to `apps/web/.env.local`:
+   ```env
+   ANTHROPIC_API_KEY=sk-ant-...
+   ```
+5. Add to Vercel:
+   ```bash
+   vercel env add ANTHROPIC_API_KEY
+   ```
+
+> **Cost:** ~$0.003–0.015 per trip plan generated (claude-sonnet-4-6). Very cheap at low volume.
+
+---
+
+## 8. Google OAuth
+
+Optional but strongly recommended — users can sign up with one click.
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com)
+2. **New Project** → name it `unaccompanied`
+3. **APIs & Services** → **OAuth consent screen**:
+   - User Type: External
+   - App name: UNACCOMPANIED
+   - Support email: your email
+4. **APIs & Services** → **Credentials** → **Create Credentials** → **OAuth client ID**
+   - Application type: Web application
+   - Authorized redirect URIs:
+     ```
+     https://xxxx.supabase.co/auth/v1/callback
+     ```
+     (find your Supabase project URL in Project Settings → API)
+5. Copy **Client ID** and **Client Secret**
+6. Supabase dashboard → **Authentication** → **Providers** → **Google**
+7. Toggle Enable → paste Client ID + Client Secret → Save
+
+---
+
+## 9. Post-Deploy Checklist
+
+Run through this after every deployment:
+
+- [ ] Landing page loads at `/`
+- [ ] Signup at `/auth/signup` works (check email confirmation)
+- [ ] Login at `/auth/login` works
+- [ ] Google OAuth redirects correctly
+- [ ] Dashboard at `/dashboard` shows after login
+- [ ] Stories page loads at `/stories`
+- [ ] Submit a story at `/stories/new` (requires login)
+- [ ] Safety page loads at `/safety`
+- [ ] Gear page loads at `/gear`
+- [ ] Trip Architect at `/plan` returns a real AI itinerary
+- [ ] Sign out works and redirects to `/`
+
+---
+
+## 10. iOS App Path
+
+The entire app is built in **Next.js** which makes the iOS transition smooth. Two options:
+
+### Option A: Capacitor (Recommended for speed — 2–4 weeks)
+
+Wraps the existing Next.js web app in a native shell. Fastest path.
+
+```bash
+# Install Capacitor
 cd apps/web
-npm install @capacitor/core @capacitor/ios @capacitor/cli
-npx cap init
+npm install @capacitor/core @capacitor/cli @capacitor/ios
+
+# Initialize
+npx cap init "UNACCOMPANIED" "com.unaccompanied.app"
+
+# Build the web app
+npm run build
+
+# Add iOS platform
 npx cap add ios
-npx cap build
-npx cap open ios  # Opens in Xcode
+
+# Sync
+npx cap sync
+
+# Open in Xcode
+npx cap open ios
 ```
 
----
+**Then in Xcode:**
+1. Set Bundle ID: `com.unaccompanied.app`
+2. Set your Apple Developer Team
+3. Add app icons and splash screen
+4. Archive → App Store Connect
 
-## PART 6 — DATA ARCHITECTURE SUMMARY
+### Option B: React Native / Expo (Recommended for long-term — 6–8 weeks)
 
-```
-Supabase (PostgreSQL)
-├── profiles           ← user accounts + travel stats
-├── stories            ← user-submitted travel stories
-├── safety_reports     ← crowdsourced city safety scores
-├── city_safety_scores ← materialized view (aggregated scores)
-├── gear_items         ← product database (seeded)
-├── gear_reviews       ← user reviews of gear
-├── trip_plans         ← AI-generated + manual itineraries
-└── encounters         ← trip overlap coordination board
+Create a proper native app that shares API and auth logic with the web app.
 
-Supabase Storage
-└── story-images/      ← user-uploaded cover photos
+```bash
+# New Expo app in the monorepo
+npx create-expo-app apps/mobile --template blank-typescript
 
-Next.js API Routes
-├── /api/stories       ← CRUD for stories
-├── /api/safety        ← GET scores, POST reports
-├── /api/gear          ← GET gear with reviews
-└── /api/auth/callback ← OAuth redirect handler
+# Shared packages can live in packages/
+# - packages/api    (Supabase client)
+# - packages/types  (TypeScript types)
 ```
 
----
+**Which to choose?**
+- **Capacitor**: Ship in 2–4 weeks, same codebase, some native limitations
+- **React Native**: 6–8 weeks, full native UX, scales better long-term
 
-## PART 7 — MONETIZATION TECH CHECKLIST
-
-| Feature | Tech Needed | Status |
-|---------|------------|--------|
-| Affiliate links | Amazon Associates signup | Ready (links in gear DB) |
-| Premium membership | Stripe + Supabase webhook | Add `stripe` npm package |
-| AI trip planner | Anthropic API key | Add `ANTHROPIC_API_KEY` env var |
-| Email newsletter | Resend or Mailchimp | Add on user signup trigger |
-| Analytics | Vercel Analytics (free) | Enable in Vercel dashboard |
-
-### To wire in real AI trip planning:
-1. Add `ANTHROPIC_API_KEY` to your env vars
-2. Install: `npm install @anthropic-ai/sdk`
-3. Create `/api/plan/route.ts` that calls Claude with the user's trip params
+For your MVP, **Capacitor** is the right call. Validate with real users, then build native if needed.
 
 ---
 
-## TROUBLESHOOTING
+## 11. Architecture Reference
 
-**"supabaseUrl is required"** → `.env.local` not found or not loaded. Make sure file is in `apps/web/` not root.
+```
+┌─────────────────────────────────────────────────────────┐
+│                  UNACCOMPANIED Platform                  │
+├──────────────┬──────────────────┬───────────────────────┤
+│  Frontend    │    Backend       │    Data               │
+│              │                  │                       │
+│  Next.js 14  │  Supabase        │  PostgreSQL           │
+│  React 18    │  (BaaS)          │  - profiles           │
+│  TypeScript  │                  │  - stories            │
+│  Tailwind    │  Auth:           │  - safety_reports     │
+│              │  - Email/Pass    │  - gear_items         │
+│  Pages:      │  - Magic link    │  - trip_plans         │
+│  /           │  - Google OAuth  │  - encounters         │
+│  /stories    │                  │                       │
+│  /safety     │  API Routes:     │  Materialized View:   │
+│  /gear       │  /api/stories    │  city_safety_scores   │
+│  /plan       │  /api/safety     │                       │
+│  /dashboard  │  /api/gear       │  Row Level Security   │
+│  /auth/*     │  /api/plan       │  on all tables        │
+├──────────────┴──────────────────┴───────────────────────┤
+│              Deployment                                   │
+│  Vercel (web) ←── GitHub main branch auto-deploy        │
+│  Supabase (db+auth) — hosted Postgres                   │
+├──────────────────────────────────────────────────────────┤
+│              AI Layer                                     │
+│  Anthropic claude-sonnet-4-6 → /api/plan route          │
+│  → Generates personalized solo itineraries              │
+└──────────────────────────────────────────────────────────┘
+```
 
-**Auth redirect loops** → Make sure redirect URLs in Supabase match exactly (including trailing slash).
+### Environment Variables Quick Reference
 
-**Build fails on Vercel** → Check that Build Command is `cd apps/web && npm install && npm run build`.
-
-**Images not loading** → Add your domain to `next.config.js` `images.domains` array.
+| Variable | Where to get it | Required |
+|----------|----------------|----------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Project Settings → API | ✅ |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Project Settings → API | ✅ |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API | ✅ |
+| `NEXT_PUBLIC_APP_URL` | Your domain / Vercel URL | ✅ |
+| `ANTHROPIC_API_KEY` | console.anthropic.com | ✅ for /plan |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | mapbox.com | Optional |
 
 ---
 
-## QUICK REFERENCE
+## Troubleshooting
 
-| Command | Where | What |
-|---------|-------|------|
-| `npm run dev` | `apps/web/` | Start local dev server |
-| `npm run build` | `apps/web/` | Production build |
-| `git push origin main` | root | Deploy to Vercel (auto) |
+**Build fails on Vercel:**
+```bash
+# Test build locally first
+cd apps/web && npm run build
+```
+
+**Supabase auth not working:**
+- Check redirect URLs include both `localhost` and production domain
+- Ensure `NEXT_PUBLIC_APP_URL` matches your actual URL exactly
+
+**`city_safety_scores` view errors:**
+- Make sure you ran the `refresh_city_safety_scores` function SQL (step 3c)
+- The view requires at least 1 safety report to return data
+
+**TypeScript errors on deploy:**
+- Run `cd apps/web && npm run lint` locally to catch issues before pushing
+
+---
+
+*Built by a woman who refused to wait. For every woman who won't either.* 🌍
