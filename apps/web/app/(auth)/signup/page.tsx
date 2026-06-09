@@ -43,7 +43,7 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         <Link href="/" className="block mb-10 text-center"
           style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 28, letterSpacing: 4 }}>
-          UN<span style={{ color: 'var(--coral)' }}>A</span>CCOMPANIED
+          SOLO<span style={{ color: 'var(--coral)' }}>F</span>TS
         </Link>
 
         {done ? (

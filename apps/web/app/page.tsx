@@ -151,7 +151,7 @@ export default function HomePage() {
       <nav className="fixed top-0 w-full z-50 px-8 py-5 flex items-center justify-between"
         style={{ background: 'linear-gradient(to bottom, rgba(26,26,46,0.95), transparent)' }}>
         <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 26, letterSpacing: 4 }}>
-          UN<span style={{ color: 'var(--coral)' }}>A</span>CCOMPANIED
+          SOLO<span style={{ color: 'var(--coral)' }}>F</span>TS
         </div>
         <div className="hidden md:flex items-center gap-8">
           {['Stories', 'Safety', 'Gear', 'Plan'].map(item => (
@@ -284,7 +284,7 @@ export default function HomePage() {
             {' '}— then went back to work on Monday.
           </h2>
           <p className="text-base leading-loose mb-4 fade-up" style={{ color: 'rgba(255,248,240,0.65)' }}>
-            UNACCOMPANIED was born from a simple truth: <strong style={{ color: 'var(--cream)' }}>you don't need to quit your job, go broke, or wait for the "right time"</strong> to see the world.
+            SOLOFTS was born from a simple truth: <strong style={{ color: 'var(--cream)' }}>you don't need to quit your job, go broke, or wait for the "right time"</strong> to see the world.
             Our founder has hit 20+ US states, 13 National Parks, and 5+ countries — all with a full-time career on Wall Street.
           </p>
           <p className="text-base leading-loose mb-4 fade-up" style={{ color: 'rgba(255,248,240,0.65)' }}>
@@ -439,7 +439,7 @@ export default function HomePage() {
       <footer className="px-8 py-10" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-6">
           <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 4 }}>
-            UN<span style={{ color: 'var(--coral)' }}>A</span>CCOMPANIED
+            SOLO<span style={{ color: 'var(--coral)' }}>F</span>TS
           </div>
           <div className="flex flex-wrap gap-6">
             {['Stories', 'Safety', 'Gear', 'Plan', 'About'].map(item => (
@@ -453,7 +453,7 @@ export default function HomePage() {
         </div>
         <div className="max-w-6xl mx-auto mt-8 pt-6 text-center text-xs tracking-wide"
           style={{ borderTop: '1px solid rgba(255,255,255,0.04)', color: 'rgba(255,248,240,0.2)' }}>
-          © 2025 UNACCOMPANIED · Built by a woman who refused to wait. Made for every woman who won't either.
+          © 2025 SOLOFTS · Built by a woman who refused to wait. Made for every woman who won't either.
         </div>
       </footer>
     </>

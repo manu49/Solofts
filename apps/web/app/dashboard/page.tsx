@@ -52,7 +52,7 @@ export default function DashboardPage() {
       <nav className="px-8 py-5 flex items-center justify-between"
         style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <Link href="/" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 4 }}>
-          UN<span style={{ color: 'var(--coral)' }}>A</span>CCOMPANIED
+          SOLO<span style={{ color: 'var(--coral)' }}>F</span>TS
         </Link>
         <button onClick={handleSignOut}
           className="flex items-center gap-2 text-xs tracking-widest uppercase transition-opacity hover:opacity-60"
