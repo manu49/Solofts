@@ -47,9 +47,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-6"
       style={{ background: 'var(--ink)' }}>
       <div className="w-full max-w-md">
-        <Link href="/" className="block mb-10 text-center"
-          style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 28, letterSpacing: 4 }}>
-          SOLO<span style={{ color: 'var(--coral)' }}>F</span>TS
+        <Link href="/" className="block mb-10 text-center">
+          <img src="/logo.svg" alt="SOLOFTS" height={48} style={{ height: 48, width: 'auto', margin: '0 auto' }} />
         </Link>
 
         {magicSent ? (

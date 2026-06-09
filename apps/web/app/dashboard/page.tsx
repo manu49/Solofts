@@ -51,8 +51,8 @@ export default function DashboardPage() {
       {/* Header */}
       <nav className="px-8 py-5 flex items-center justify-between"
         style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <Link href="/" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 4 }}>
-          SOLO<span style={{ color: 'var(--coral)' }}>F</span>TS
+        <Link href="/">
+          <img src="/logo.svg" alt="SOLOFTS" height={36} style={{ height: 36, width: 'auto' }} />
         </Link>
         <button onClick={handleSignOut}
           className="flex items-center gap-2 text-xs tracking-widest uppercase transition-opacity hover:opacity-60"

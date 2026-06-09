@@ -150,9 +150,7 @@ export default function HomePage() {
       {/* ── NAV ── */}
       <nav className="fixed top-0 w-full z-50 px-8 py-5 flex items-center justify-between"
         style={{ background: 'linear-gradient(to bottom, rgba(26,26,46,0.95), transparent)' }}>
-        <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 26, letterSpacing: 4 }}>
-          SOLO<span style={{ color: 'var(--coral)' }}>F</span>TS
-        </div>
+        <img src="/logo.svg" alt="SOLOFTS" height={44} style={{ height: 44, width: 'auto' }} />
         <div className="hidden md:flex items-center gap-8">
           {['Stories', 'Safety', 'Gear', 'Plan'].map(item => (
             <Link key={item} href={`/${item.toLowerCase()}`}
@@ -439,7 +437,7 @@ export default function HomePage() {
       <footer className="px-8 py-10" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-6">
           <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 4 }}>
-            SOLO<span style={{ color: 'var(--coral)' }}>F</span>TS
+            <img src="/logo.svg" alt="SOLOFTS" height={36} style={{ height: 36, width: 'auto' }} />
           </div>
           <div className="flex flex-wrap gap-6">
             {['Stories', 'Safety', 'Gear', 'Plan', 'About'].map(item => (
