@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   const body = await request.json()
   const { destination, days, budget, pto, risk, fitness, interests } = body
 
-  // Call Anthropic API for trip planning
+  // Call OpenAI API for trip planning
   const prompt = `You are an expert solo female travel planner. Generate a detailed, realistic itinerary for the following trip.
 
 Trip details:
@@ -42,22 +42,25 @@ Respond ONLY with a valid JSON object (no markdown, no backticks) in this exact 
 }`
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY || '',
-        'anthropic-version': '2023-06-01',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-20250514',
+        model: 'gpt-4o',
         max_tokens: 4000,
-        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: 'You are an expert solo female travel planner. Always respond with valid JSON only.' },
+          { role: 'user', content: prompt },
+        ],
       }),
     })
 
     const data = await response.json()
-    const text = data.content?.[0]?.text || ''
+    const text = data.choices?.[0]?.message?.content || ''
 
     let itinerary
     try {
