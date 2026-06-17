@@ -451,7 +451,7 @@ export default function HomePage() {
         </div>
         <div className="max-w-6xl mx-auto mt-8 pt-6 text-center text-xs tracking-wide"
           style={{ borderTop: '1px solid rgba(255,255,255,0.04)', color: 'rgba(255,248,240,0.2)' }}>
-          © 2025 SOLOFTS · Built by a woman who refused to wait. Made for every woman who won't either.
+          © 2025 SOLOFTS · Built by a woman who refused to wait. Made for every woman who won&apos;t either.
         </div>
       </footer>
     </>
