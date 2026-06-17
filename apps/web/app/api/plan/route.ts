@@ -46,7 +46,7 @@ Respond ONLY with a valid JSON object (no markdown, no backticks) in this exact 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY || process.env.OPEN_AI_API_KEY}`,
       },
       body: JSON.stringify({
         model: 'gpt-4o',
