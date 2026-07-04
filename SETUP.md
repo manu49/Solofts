@@ -182,18 +182,19 @@ vercel link
 ```bash
 # Add each env var as a Vercel secret
 vercel env add NEXT_PUBLIC_SUPABASE_URL
-# paste your value when prompted, select: Production + Preview + Development
+# paste the API URL, e.g. https://your-project-ref.supabase.co
+# Do NOT paste the Supabase dashboard URL. Select: Production + Preview + Development
 
 vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
 vercel env add SUPABASE_SERVICE_ROLE_KEY
-vercel env add ANTHROPIC_API_KEY
+vercel env add OPENAI_API_KEY
 
 # For APP_URL, add after you have your Vercel domain:
 vercel env add NEXT_PUBLIC_APP_URL
 # value: https://your-app.vercel.app
 ```
 
-Or do this in the Vercel dashboard: **Project → Settings → Environment Variables**
+Or do this in the Vercel dashboard: **Project → Settings → Environment Variables**. Do not set these values to placeholders like `@supabase_url`; paste the actual values.
 
 ### 5d. Deploy
 
@@ -228,23 +229,23 @@ Vercel will build and give you a URL like `https://unaccompanied-xxxx.vercel.app
 
 ---
 
-## 7. Anthropic AI Key
+## 7. OpenAI API Key
 
-The **Trip Architect** (`/plan`) uses Claude to generate real itineraries.
+The **Trip Architect** (`/plan`) uses OpenAI to generate real itineraries.
 
-1. Go to [console.anthropic.com](https://console.anthropic.com)
-2. Create account → **API Keys** → **Create Key**
-3. Copy the key (starts with `sk-ant-...`)
+1. Go to [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+2. Create an API key
+3. Copy the key (starts with `sk-...`)
 4. Add to `apps/web/.env.local`:
    ```env
-   ANTHROPIC_API_KEY=sk-ant-...
+   OPENAI_API_KEY=sk-...
    ```
 5. Add to Vercel:
    ```bash
-   vercel env add ANTHROPIC_API_KEY
+   vercel env add OPENAI_API_KEY
    ```
 
-> **Cost:** ~$0.003–0.015 per trip plan generated (claude-sonnet-4-6). Very cheap at low volume.
+> **Cost:** depends on OpenAI model usage and generated token volume.
 
 ---
 
