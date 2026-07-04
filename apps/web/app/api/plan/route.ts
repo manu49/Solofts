@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import type { Database } from '@/lib/supabase/database.types'
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
@@ -73,7 +74,7 @@ Respond ONLY with a valid JSON object (no markdown, no backticks) in this exact 
 
     // Optionally save to DB
     if (user) {
-      await supabase.from('trip_plans').insert({
+      const tripPlan: Database['public']['Tables']['trip_plans']['Insert'] = {
         author_id: user.id,
         title: `${destination} — ${days} Day Trip`,
         destination,
@@ -85,7 +86,8 @@ Respond ONLY with a valid JSON object (no markdown, no backticks) in this exact 
         itinerary,
         is_public: false,
         ai_generated: true,
-      })
+      }
+      await (supabase as any).from('trip_plans').insert(tripPlan)
     }
 
     return NextResponse.json({ itinerary })
