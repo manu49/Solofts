@@ -170,8 +170,10 @@ vercel login
 ```bash
 # From repo root
 vercel link
+# If prompted for the project directory/root, choose: apps/web
 # → Select: Link to existing project? No (create new)
 # → Project name: unaccompanied (or your choice)
+# → Root Directory: apps/web
 # → Detected framework: Next.js ✓
 ```
 
@@ -212,7 +214,7 @@ Vercel will build and give you a URL like `https://unaccompanied-xxxx.vercel.app
 
 1. Push to `main` → Vercel auto-deploys
 2. In Vercel dashboard → **Settings** → **Git** → connect to `github.com/manu49/Solofts`
-3. Set **Root Directory**: `.` (repo root — vercel.json handles the rest)
+3. Set **Root Directory**: `apps/web` (this is where the Next.js `package.json` lives)
 
 ---
 

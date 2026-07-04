@@ -35,6 +35,7 @@ export interface Database {
           home_country?: string | null
         }
         Update: Partial<Database['public']['Tables']['profiles']['Insert']>
+        Relationships: []
       }
       stories: {
         Row: {
@@ -58,6 +59,7 @@ export interface Database {
         }
         Insert: Omit<Database['public']['Tables']['stories']['Row'], 'id' | 'views' | 'likes' | 'created_at' | 'updated_at'>
         Update: Partial<Database['public']['Tables']['stories']['Insert']>
+        Relationships: []
       }
       safety_reports: {
         Row: {
@@ -78,6 +80,7 @@ export interface Database {
         }
         Insert: Omit<Database['public']['Tables']['safety_reports']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['safety_reports']['Insert']>
+        Relationships: []
       }
       gear_items: {
         Row: {
@@ -96,6 +99,7 @@ export interface Database {
         }
         Insert: Omit<Database['public']['Tables']['gear_items']['Row'], 'id' | 'avg_rating' | 'review_count' | 'upvotes' | 'created_at'>
         Update: Partial<Database['public']['Tables']['gear_items']['Insert']>
+        Relationships: []
       }
       gear_reviews: {
         Row: {
@@ -109,6 +113,7 @@ export interface Database {
         }
         Insert: Omit<Database['public']['Tables']['gear_reviews']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['gear_reviews']['Insert']>
+        Relationships: []
       }
       trip_plans: {
         Row: {
@@ -128,6 +133,7 @@ export interface Database {
         }
         Insert: Omit<Database['public']['Tables']['trip_plans']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['trip_plans']['Insert']>
+        Relationships: []
       }
       encounters: {
         Row: {
@@ -143,6 +149,7 @@ export interface Database {
         }
         Insert: Omit<Database['public']['Tables']['encounters']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['encounters']['Insert']>
+        Relationships: []
       }
     }
     Views: {
@@ -160,8 +167,12 @@ export interface Database {
           report_count: number
           last_reported: string
         }
+        Relationships: []
       }
     }
+    Functions: {}
+    Enums: {}
+    CompositeTypes: {}
   }
 }
 
