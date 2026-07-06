@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Search, Filter, MapPin, Clock, DollarSign, Briefcase } from 'lucide-react'
+import { Search, MapPin, Clock, DollarSign, Briefcase } from 'lucide-react'
 import { TAG_LABELS } from '@/lib/utils'
 
 const MOCK_STORIES = [
@@ -64,19 +64,72 @@ const MOCK_STORIES = [
 
 const TAG_OPTIONS = Object.entries(TAG_LABELS)
 
+type StoryCard = {
+  id: string
+  title: string
+  destination: string
+  country: string
+  days_count: number | null
+  budget_usd: number | null
+  pto_days: number | null
+  tags: string[]
+  author: { username?: string | null; full_name?: string | null; profession?: string | null }
+  likes: number
+  views: number
+  cover_image: string | null
+  created_at: string
+}
+
+type StoryApiRow = Omit<StoryCard, 'author'> & {
+  author?: StoryCard['author'] | null
+}
+
+const toStoryCard = (story: StoryApiRow): StoryCard => ({
+  ...story,
+  tags: story.tags ?? [],
+  author: story.author ?? { full_name: 'Solofts traveler', profession: 'Community member' },
+})
+
 export default function StoriesPage() {
   const [search, setSearch] = useState('')
   const [activeTag, setActiveTag] = useState<string | null>(null)
-  const [stories, setStories] = useState(MOCK_STORIES)
+  const [stories, setStories] = useState<StoryCard[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState('')
 
   useEffect(() => {
-    let filtered = MOCK_STORIES
-    if (search) filtered = filtered.filter(s =>
-      s.title.toLowerCase().includes(search.toLowerCase()) ||
-      s.destination.toLowerCase().includes(search.toLowerCase())
-    )
-    if (activeTag) filtered = filtered.filter(s => s.tags.includes(activeTag as never))
-    setStories(filtered)
+    const params = new URLSearchParams()
+    if (search) params.set('search', search)
+    if (activeTag) params.set('tag', activeTag)
+
+    const loadStories = async () => {
+      setLoading(true)
+      setLoadError('')
+
+      try {
+        const response = await fetch(`/api/stories?${params.toString()}`)
+        const result = await response.json()
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Unable to load stories')
+        }
+
+        setStories((result.data ?? []).map(toStoryCard))
+      } catch (err) {
+        setLoadError(err instanceof Error ? err.message : 'Unable to load stories')
+        let filtered = MOCK_STORIES
+        if (search) filtered = filtered.filter(s =>
+          s.title.toLowerCase().includes(search.toLowerCase()) ||
+          s.destination.toLowerCase().includes(search.toLowerCase())
+        )
+        if (activeTag) filtered = filtered.filter(s => s.tags.includes(activeTag as never))
+        setStories(filtered)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadStories()
   }, [search, activeTag])
 
   return (
@@ -137,6 +190,21 @@ export default function StoriesPage() {
         </div>
       </div>
 
+      {loadError && (
+        <div className="max-w-6xl mx-auto px-8 pt-8">
+          <div className="p-3 text-sm text-center"
+            style={{ background: 'rgba(255,184,77,0.1)', border: '1px solid rgba(255,184,77,0.25)', color: 'var(--gold)' }}>
+            Could not load live community stories, so sample stories are shown instead. {loadError}
+          </div>
+        </div>
+      )}
+
+      {loading && (
+        <div className="text-center py-20" style={{ color: 'rgba(255,248,240,0.45)' }}>
+          Loading community stories...
+        </div>
+      )}
+
       {/* Stories grid */}
       <div className="max-w-6xl mx-auto px-8 py-12 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stories.map((story) => (
@@ -154,7 +222,7 @@ export default function StoriesPage() {
                 {story.tags.slice(0, 2).map(tag => (
                   <span key={tag} className="text-xs px-2 py-0.5 tracking-wide"
                     style={{ background: 'rgba(255,77,77,0.12)', color: 'var(--coral)' }}>
-                    {TAG_LABELS[tag]}
+                    {TAG_LABELS[tag as keyof typeof TAG_LABELS] ?? tag}
                   </span>
                 ))}
               </div>
@@ -181,12 +249,12 @@ export default function StoriesPage() {
                 style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                 <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
                   style={{ background: 'var(--coral)' }}>
-                  {story.author.full_name?.[0]}
+                  {(story.author.full_name || story.author.username || 'S')[0]}
                 </div>
                 <div>
-                  <div className="text-xs font-medium">{story.author.full_name}</div>
+                  <div className="text-xs font-medium">{story.author.full_name || story.author.username || 'Solofts traveler'}</div>
                   <div className="flex items-center gap-1 text-xs" style={{ color: 'rgba(255,248,240,0.4)' }}>
-                    <Briefcase size={10} /> {story.author.profession}
+                    <Briefcase size={10} /> {story.author.profession || 'Community member'}
                   </div>
                 </div>
                 <div className="ml-auto text-xs" style={{ color: 'rgba(255,248,240,0.3)' }}>
@@ -198,7 +266,7 @@ export default function StoriesPage() {
         ))}
       </div>
 
-      {stories.length === 0 && (
+      {!loading && stories.length === 0 && (
         <div className="text-center py-20" style={{ color: 'rgba(255,248,240,0.35)' }}>
           <div className="text-6xl mb-4">🗺️</div>
           <div className="text-lg">No stories found. Be the first to share this journey!</div>

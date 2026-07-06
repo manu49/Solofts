@@ -249,7 +249,26 @@ The **Trip Architect** (`/plan`) uses OpenAI to generate real itineraries.
 
 ---
 
-## 8. Google OAuth
+
+## 8. Auth Redirect URLs
+
+Supabase email verification and magic links must be allowed to return to the app callback route. In Supabase Dashboard → **Authentication** → **URL Configuration**:
+
+1. Set **Site URL** to your deployed app URL, for example:
+   ```
+   https://your-app.vercel.app
+   ```
+2. Add these **Redirect URLs** for local and deployed auth callbacks:
+   ```
+   http://localhost:3000/api/auth/callback
+   https://your-app.vercel.app/api/auth/callback
+   ```
+
+If these URLs are missing or point at a stale deployment, the verification email can land on a 404 or fail before the app can exchange the Supabase confirmation code.
+
+---
+
+## 9. Google OAuth
 
 Optional but strongly recommended — users can sign up with one click.
 
@@ -272,12 +291,12 @@ Optional but strongly recommended — users can sign up with one click.
 
 ---
 
-## 9. Post-Deploy Checklist
+## 10. Post-Deploy Checklist
 
 Run through this after every deployment:
 
 - [ ] Landing page loads at `/`
-- [ ] Signup at `/auth/signup` works (check email confirmation)
+- [ ] Signup at `/auth/signup` works and the verification email redirects to `/api/auth/callback`, then `/dashboard`
 - [ ] Login at `/auth/login` works
 - [ ] Google OAuth redirects correctly
 - [ ] Dashboard at `/dashboard` shows after login

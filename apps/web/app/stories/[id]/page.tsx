@@ -9,14 +9,14 @@ export default async function StoryPage({ params }: { params: { id: string } }) 
 
   const { data: story } = await supabase
     .from('stories')
-    .select(`*, profiles (username, full_name, avatar_url, profession, bio)`)
+    .select(`*, author:profiles!stories_author_id_fkey (username, full_name, avatar_url, profession, bio)`)
     .eq('id', params.id)
     .eq('is_published', true)
     .single()
 
   if (!story) notFound()
 
-  const author = story.profiles as { username: string; full_name: string | null; avatar_url: string | null; profession: string | null; bio: string | null } | null
+  const author = story.author as { username: string; full_name: string | null; avatar_url: string | null; profession: string | null; bio: string | null } | null
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--ink)' }}>
