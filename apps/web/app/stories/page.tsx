@@ -81,13 +81,13 @@ type StoryCard = {
 }
 
 type StoryApiRow = Omit<StoryCard, 'author'> & {
-  profiles?: StoryCard['author'] | null
+  author?: StoryCard['author'] | null
 }
 
 const toStoryCard = (story: StoryApiRow): StoryCard => ({
   ...story,
   tags: story.tags ?? [],
-  author: story.profiles ?? { full_name: 'Solofts traveler', profession: 'Community member' },
+  author: story.author ?? { full_name: 'Solofts traveler', profession: 'Community member' },
 })
 
 export default function StoriesPage() {

@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     .from('stories')
     .select(`
       *,
-      profiles (username, full_name, avatar_url, profession)
+      author:profiles!stories_author_id_fkey (username, full_name, avatar_url, profession)
     `)
     .eq('is_published', true)
     .order('created_at', { ascending: false })
