@@ -4,7 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/dashboard'
+  const rawNext = searchParams.get('next') ?? '/dashboard'
+  const next = rawNext.startsWith('/') ? rawNext : '/dashboard'
 
   if (code) {
     const supabase = await createClient()
@@ -12,7 +13,11 @@ export async function GET(request: Request) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`)
     }
+
+    const message = encodeURIComponent('Your verification link is invalid or has expired. Please request a new sign-in link.')
+    return NextResponse.redirect(`${origin}/auth/error?message=${message}`)
   }
 
-  return NextResponse.redirect(`${origin}/auth/error`)
+  const message = encodeURIComponent('The verification link is missing a confirmation code. Please request a new sign-in link.')
+  return NextResponse.redirect(`${origin}/auth/error?message=${message}`)
 }
