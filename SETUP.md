@@ -432,3 +432,29 @@ cd apps/web && npm run build
 ---
 
 *Built by a woman who refused to wait. For every woman who won't either.* 🌍
+
+---
+
+## 12. Monitor Created Profiles
+
+Profiles are stored in the `public.profiles` table and are created automatically when Supabase Auth inserts a new user. To monitor profiles created by the webapp:
+
+1. Open **Supabase Dashboard → SQL Editor → New Query**.
+2. Open [`docs/profile-monitoring.sql`](./docs/profile-monitoring.sql).
+3. Run query **1** to see the latest created profiles, query **2** for daily signup counts, and query **3** to catch auth users missing a profile.
+
+A minimal query for the latest profiles is:
+
+```sql
+select
+  id,
+  username,
+  full_name,
+  profession,
+  home_country,
+  joined_at,
+  updated_at
+from public.profiles
+order by joined_at desc
+limit 50;
+```
