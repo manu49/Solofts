@@ -7,12 +7,18 @@ import { TAG_LABELS, safetyColor } from '@/lib/utils'
 export default async function StoryPage({ params }: { params: { id: string } }) {
   const supabase = await createClient()
 
-  const { data: story } = await supabase
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let query = supabase
     .from('stories')
     .select(`*, author:profiles!stories_author_id_fkey (username, full_name, avatar_url, profession, bio)`)
     .eq('id', params.id)
-    .eq('is_published', true)
-    .single()
+
+  query = user
+    ? query.or(`is_published.eq.true,author_id.eq.${user.id}`)
+    : query.eq('is_published', true)
+
+  const { data: story } = await query.single()
 
   if (!story) notFound()
 

@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { MapPin, BookOpen, Package, Compass, LogOut, Plus, Globe } from 'lucide-react'
-import type { Profile } from '@/lib/supabase/database.types'
+import { MapPin, BookOpen, Package, Compass, LogOut, Plus, Globe, Clock } from 'lucide-react'
+import type { Profile, Story } from '@/lib/supabase/database.types'
 
 const QUICK_LINKS = [
   { href: '/stories/new', icon: BookOpen, label: 'Share a Story', color: 'var(--coral)', desc: 'Tell the community where you went' },
@@ -16,6 +16,7 @@ const QUICK_LINKS = [
 
 export default function DashboardPage() {
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [stories, setStories] = useState<Story[]>([])
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const supabase = createClient()
@@ -24,8 +25,17 @@ export default function DashboardPage() {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/auth/login'); return }
-      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-      setProfile(data)
+      const [{ data: profileData }, { data: storyData }] = await Promise.all([
+        supabase.from('profiles').select('*').eq('id', user.id).single(),
+        supabase
+          .from('stories')
+          .select('*')
+          .eq('author_id', user.id)
+          .order('created_at', { ascending: false }),
+      ])
+
+      setProfile(profileData)
+      setStories(storyData ?? [])
       setLoading(false)
     }
     load()
@@ -81,7 +91,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-3 gap-px mb-14">
           {[
             { label: 'Countries Visited', value: profile?.countries_visited || 0, icon: Globe },
-            { label: 'Trips Shared',      value: profile?.trips_count || 0,       icon: BookOpen },
+            { label: 'Trips Shared',      value: stories.length || profile?.trips_count || 0, icon: BookOpen },
             { label: 'Pack Members',      value: '23K+',                           icon: MapPin },
           ].map(stat => (
             <div key={stat.label} className="p-6"
@@ -113,6 +123,55 @@ export default function DashboardPage() {
               </Link>
             ))}
           </div>
+        </div>
+
+
+        {/* My stories */}
+        <div className="mt-10">
+          <div className="flex items-center justify-between gap-4 mb-6">
+            <div>
+              <div className="text-xs tracking-widest uppercase mb-1" style={{ color: 'rgba(255,248,240,0.35)' }}>
+                My Stories
+              </div>
+              <p className="text-xs" style={{ color: 'rgba(255,248,240,0.45)' }}>
+                Your published stories and drafts stay available after you sign in.
+              </p>
+            </div>
+            <Link href="/stories/new"
+              className="flex items-center gap-2 px-4 py-2 text-xs tracking-widest uppercase transition-all hover:opacity-80"
+              style={{ background: 'var(--coral)', color: 'white' }}>
+              <Plus size={12} /> New Story
+            </Link>
+          </div>
+
+          {stories.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-3">
+              {stories.map(story => (
+                <Link key={story.id} href={`/stories/${story.id}`}
+                  className="group p-5 transition-all duration-200 hover:-translate-y-1"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <h2 className="text-base font-medium leading-snug group-hover:opacity-80">{story.title}</h2>
+                    <span className="shrink-0 px-2 py-1 text-[10px] tracking-widest uppercase"
+                      style={{
+                        background: story.is_published ? 'rgba(116,176,154,0.12)' : 'rgba(255,184,77,0.12)',
+                        color: story.is_published ? 'var(--sage)' : 'var(--gold)',
+                      }}>
+                      {story.is_published ? 'Published' : 'Draft'}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-4 text-xs" style={{ color: 'rgba(255,248,240,0.45)' }}>
+                    <span className="flex items-center gap-1.5"><MapPin size={11} style={{ color: 'var(--coral)' }} /> {story.destination}</span>
+                    <span className="flex items-center gap-1.5"><Clock size={11} style={{ color: 'var(--gold)' }} /> {new Date(story.created_at).toLocaleDateString()}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="p-5 text-sm" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,248,240,0.5)' }}>
+              You have not shared a story yet. When you publish one, it will appear here.
+            </div>
+          )}
         </div>
 
         {/* Profile completeness nudge */}
