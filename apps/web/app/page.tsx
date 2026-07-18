@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowRight, MapPin, Shield, Package, Compass, Users, TrendingUp } from 'lucide-react'
 
@@ -100,35 +100,6 @@ const STORIES = [
 ]
 
 export default function HomePage() {
-  const cursorRef = useRef<HTMLDivElement>(null)
-  const ringRef = useRef<HTMLDivElement>(null)
-  const rafRef = useRef<number>(0)
-  const mouse = useRef({ x: 0, y: 0 })
-  const ring = useRef({ x: 0, y: 0 })
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY }
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate(${e.clientX - 6}px,${e.clientY - 6}px)`
-      }
-    }
-    const animate = () => {
-      ring.current.x += (mouse.current.x - ring.current.x) * 0.12
-      ring.current.y += (mouse.current.y - ring.current.y) * 0.12
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ring.current.x - 18}px,${ring.current.y - 18}px)`
-      }
-      rafRef.current = requestAnimationFrame(animate)
-    }
-    document.addEventListener('mousemove', onMove)
-    rafRef.current = requestAnimationFrame(animate)
-    return () => {
-      document.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(rafRef.current)
-    }
-  }, [])
-
   // Intersection observer for fade-up
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -143,10 +114,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Cursor */}
-      <div className="cursor" ref={cursorRef} />
-      <div className="cursor-ring" ref={ringRef} />
-
       {/* ── NAV ── */}
       <nav className="fixed top-0 w-full z-50 px-8 py-5 flex items-center justify-between"
         style={{ background: 'linear-gradient(to bottom, rgba(26,26,46,0.95), transparent)' }}>

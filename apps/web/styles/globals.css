@@ -38,28 +38,8 @@ body {
 /* ── Focus ring ── */
 :focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 
-/* ── Custom cursor ── */
-body { cursor: none; }
-.cursor {
-  width: 12px; height: 12px;
-  background: var(--coral);
-  border-radius: 50%;
-  position: fixed; top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  transition: transform 0.1s;
-}
-.cursor-ring {
-  width: 36px; height: 36px;
-  border: 1.5px solid var(--gold);
-  border-radius: 50%;
-  position: fixed; top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9998;
-  mix-blend-mode: difference;
-  transition: width 0.2s, height 0.2s, border-color 0.2s;
-}
+/* ── Cursor ── */
+body { cursor: auto; }
 
 /* ── Grid bg ── */
 .grid-bg {
