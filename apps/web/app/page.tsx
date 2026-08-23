@@ -262,19 +262,50 @@ export default function HomePage() {
         </div>
 
         <div className="relative h-96 md:h-[480px] fade-up">
-          <div className="absolute right-0 top-0 w-3/4 p-6 rounded-sm"
-            style={{ background: 'linear-gradient(135deg,rgba(255,77,77,0.15),rgba(155,89,182,0.1))', border: '1px solid rgba(255,77,77,0.2)' }}>
-            <div className="text-xs tracking-widest uppercase mb-3" style={{ color: 'var(--coral)' }}>🌵 Nevada, Desert Highway</div>
-            <div className="text-lg mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-              "Got my car stuck in sand at dusk. No signal. Dug it out alone by dark."
+          <div className="absolute right-0 top-0 w-3/4 rounded-sm overflow-hidden"
+            style={{ border: '1px solid rgba(255,77,77,0.25)', boxShadow: '0 20px 40px rgba(0,0,0,0.35)' }}>
+            <img src="/founder-golden-gate.jpg" alt="Founder solo at Golden Gate Bridge, San Francisco"
+              className="w-full h-64 md:h-80 object-cover" />
+            <div className="p-4" style={{ background: 'linear-gradient(135deg,rgba(255,77,77,0.15),rgba(155,89,182,0.1))' }}>
+              <div className="text-xs tracking-widest uppercase mb-1" style={{ color: 'var(--coral)' }}>🌉 San Francisco, Golden Gate</div>
+              <div className="text-xs tracking-wide" style={{ color: 'rgba(255,248,240,0.5)' }}>Solo · Sunset lookout · Full-time on Wall Street the next morning</div>
             </div>
-            <div className="text-xs tracking-wide" style={{ color: 'rgba(255,248,240,0.4)' }}>@ Death Valley NP · Solo · Day 4 of 7</div>
           </div>
-          <div className="absolute left-0 p-6 rounded-sm"
-            style={{ bottom: '8%', width: '55%', background: 'linear-gradient(135deg,rgba(255,184,48,0.12),rgba(91,196,209,0.08))', border: '1px solid rgba(255,184,48,0.2)' }}>
-            <div className="text-xs tracking-widest uppercase mb-2" style={{ color: 'var(--gold)' }}>📍 13 National Parks & counting</div>
-            <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 60, color: 'var(--gold)', lineHeight: 1 }}>20+</div>
-            <div className="text-xs mt-1" style={{ color: 'rgba(255,248,240,0.45)' }}>US States. With a day job.</div>
+          <div className="absolute left-0 rounded-sm overflow-hidden"
+            style={{ bottom: '6%', width: '58%', border: '1px solid rgba(255,184,48,0.25)', boxShadow: '0 20px 40px rgba(0,0,0,0.35)' }}>
+            <img src="/founder-puerto-rico.jpg" alt="Founder solo at El Morro, San Juan, Puerto Rico"
+              className="w-full h-52 md:h-64 object-cover" />
+            <div className="p-4" style={{ background: 'linear-gradient(135deg,rgba(255,184,48,0.12),rgba(91,196,209,0.08))' }}>
+              <div className="text-xs tracking-widest uppercase mb-1" style={{ color: 'var(--gold)' }}>📍 13 National Parks & counting</div>
+              <div className="text-xs" style={{ color: 'rgba(255,248,240,0.45)' }}>El Morro, San Juan · 20+ US States. With a day job.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── ARCHIVE STRIP ── */}
+      <section className="px-8 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-3 mb-8 text-xs tracking-widest uppercase fade-up justify-center"
+            style={{ color: 'rgba(255,248,240,0.4)' }}>
+            <span className="block w-8 h-px" style={{ background: 'rgba(255,248,240,0.3)' }} />
+            From the Archive
+            <span className="block w-8 h-px" style={{ background: 'rgba(255,248,240,0.3)' }} />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {[
+              { src: '/archive-travel-magnets.jpg', alt: 'Fridge covered in travel souvenir magnets from every trip' },
+              { src: '/archive-worldcup-stadium.jpg', alt: 'World Cup 2026 match, stadium view' },
+              { src: '/archive-worldcup-crowd.jpg', alt: 'World Cup 2026 fan zone crowd' },
+              { src: '/archive-palace-fine-arts.jpg', alt: 'Palace of Fine Arts rotunda, San Francisco' },
+              { src: '/archive-street.jpg', alt: 'Solo on a city sidewalk, mid-errand' },
+            ].map((img, i) => (
+              <div key={img.src} className="fade-up overflow-hidden rounded-sm aspect-square"
+                style={{ transitionDelay: `${i * 60}ms`, border: '1px solid rgba(255,255,255,0.08)' }}>
+                <img src={img.src} alt={img.alt}
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
