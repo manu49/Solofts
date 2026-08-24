@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <title>SOLOFTS — passport stamp badge</title>
+  <defs>
+    <path id="arcTop" d="M 150 150 m -104 0 a 104 104 0 1 1 208 0" fill="none"/>
+    <path id="arcBot" d="M 150 150 m -98 0 a 98 98 0 1 0 196 0" fill="none"/>
+  </defs>
+  <rect width="300" height="300" fill="#1A1A2E"/>
+  <circle cx="150" cy="150" r="126" fill="none" stroke="#FFB830" stroke-width="2.5" opacity="0.75"/>
+  <circle cx="150" cy="150" r="116" fill="none" stroke="#FFB830" stroke-width="1" opacity="0.4"/>
+  <circle cx="150" cy="150" r="84" fill="none" stroke="#FF4D4D" stroke-width="1" opacity="0.3"/>
+  <circle cx="150" cy="150" r="100" fill="none" stroke="#FF4D4D" stroke-width="1" stroke-dasharray="3 7" opacity="0.4"/>
+  <text font-family="sans-serif" font-size="12" font-weight="500" letter-spacing="5" fill="#FFB830" opacity="0.85">
+    <textPath href="#arcTop" startOffset="50%" text-anchor="middle">SOLO FEMALE TRAVELERS</textPath>
+  </text>
+  <text font-family="sans-serif" font-size="10" letter-spacing="3.5" fill="#FFF8F0" opacity="0.5">
+    <textPath href="#arcBot" startOffset="50%" text-anchor="middle">EST. SOLO &#183; GO ANYWAY</textPath>
+  </text>
+  <path d="M150 93.2 C135.12 93.2 126 103.28 126 120.32 C126 135.68 150 158.0 150 158.0 C150 158.0 174 135.68 174 120.32 C174 103.28 164.88 93.2 150 93.2 Z" fill="#FF4D4D"/>
+  <circle cx="150" cy="120.32" r="9.12" fill="#1A1A2E"/>
+  <path d="M22 166V206H126V158Q126 90 183 90Q211 90 225.5 106.5Q240 123 240 160Q240 204 220.0 237.5Q200 271 146 318Q78 378 51.0 426.5Q24 475 24 536Q24 619 66.0 664.5Q108 710 188 710Q267 710 307.5 664.5Q348 619 348 534V505H244V541Q244 577 230.0 593.5Q216 610 189 610Q134 610 134 543Q134 505 154.5 472.0Q175 439 229 392Q298 332 324.0 283.0Q350 234 350 168Q350 82 307.5 36.0Q265 -10 184 -10Q104 -10 63.0 35.5Q22 81 22 166Z" transform="translate(94.27,200.00) scale(0.036000,-0.036000)" fill="#FFF8F0" />
+  <path d="M33 166V534Q33 618 76.0 664.0Q119 710 200 710Q281 710 324.0 664.0Q367 618 367 534V166Q367 82 324.0 36.0Q281 -10 200 -10Q119 -10 76.0 36.0Q33 82 33 166ZM257 159V541Q257 610 200 610Q143 610 143 541V159Q143 90 200 90Q257 90 257 159Z" transform="translate(110.66,200.00) scale(0.036000,-0.036000)" fill="#FFF8F0" />
+  <path d="M41 700H151V100H332V0H41Z" transform="translate(128.06,200.00) scale(0.036000,-0.036000)" fill="#FFF8F0" />
+  <path d="M33 166V534Q33 618 76.0 664.0Q119 710 200 710Q281 710 324.0 664.0Q367 618 367 534V166Q367 82 324.0 36.0Q281 -10 200 -10Q119 -10 76.0 36.0Q33 82 33 166ZM257 159V541Q257 610 200 610Q143 610 143 541V159Q143 90 200 90Q257 90 257 159Z" transform="translate(143.45,200.00) scale(0.036000,-0.036000)" fill="#FFF8F0" />
+  <path d="M41 700H332V600H151V405H293V305H151V0H41Z" transform="translate(160.85,200.00) scale(0.036000,-0.036000)" fill="#FF4D4D" />
+  <path d="M127 600H12V700H352V600H237V0H127Z" transform="translate(176.23,200.00) scale(0.036000,-0.036000)" fill="#FFF8F0" />
+  <path d="M22 166V206H126V158Q126 90 183 90Q211 90 225.5 106.5Q240 123 240 160Q240 204 220.0 237.5Q200 271 146 318Q78 378 51.0 426.5Q24 475 24 536Q24 619 66.0 664.5Q108 710 188 710Q267 710 307.5 664.5Q348 619 348 534V505H244V541Q244 577 230.0 593.5Q216 610 189 610Q134 610 134 543Q134 505 154.5 472.0Q175 439 229 392Q298 332 324.0 283.0Q350 234 350 168Q350 82 307.5 36.0Q265 -10 184 -10Q104 -10 63.0 35.5Q22 81 22 166Z" transform="translate(192.34,200.00) scale(0.036000,-0.036000)" fill="#FFF8F0" />
+  <g stroke="#FFB830" stroke-width="2" opacity="0.7"><line x1="150" y1="18" x2="150" y2="12"/><line x1="150" y1="282" x2="150" y2="288"/><line x1="282" y1="150" x2="288" y2="150"/><line x1="18" y1="150" x2="12" y2="150"/></g>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>SOLOFTS — icon only (app / favicon)</title>
+  <defs>
+    <radialGradient id="pg3" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FF7070"/><stop offset="100%" stop-color="#FF4D4D"/>
+    </radialGradient>
+    <clipPath id="round"><rect width="256" height="256" rx="56"/></clipPath>
+  </defs>
+  <g clip-path="url(#round)">
+    <rect width="256" height="256" fill="#1A1A2E"/>
+    <g opacity="0.05" stroke="#FFB830" stroke-width="0.75">
+      <line x1="0" y1="64" x2="256" y2="64"/><line x1="0" y1="128" x2="256" y2="128"/>
+      <line x1="0" y1="192" x2="256" y2="192"/><line x1="64" y1="0" x2="64" y2="256"/>
+      <line x1="128" y1="0" x2="128" y2="256"/><line x1="192" y1="0" x2="192" y2="256"/>
+    </g>
+    <circle cx="128" cy="128" r="86" fill="none" stroke="#FF4D4D" stroke-width="2" opacity="0.18"/>
+    <circle cx="128" cy="128" r="66" fill="none" stroke="#FF4D4D" stroke-width="1" opacity="0.12"/>
+    <path d="M128 46.60000000000001 C95.75999999999999 46.60000000000001 76 68.44000000000001 76 105.36 C76 138.64 128 187.0 128 187.0 C128 187.0 180 138.64 180 105.36 C180 68.44000000000001 160.24 46.60000000000001 128 46.60000000000001 Z" fill="url(#pg3)"/>
+  <circle cx="128" cy="105.36" r="19.76" fill="#1A1A2E"/>
+    <g stroke="#FFB830" stroke-width="2.5" opacity="0.6"><line x1="128" y1="38" x2="128" y2="32"/><line x1="128" y1="218" x2="128" y2="224"/><line x1="218" y1="128" x2="224" y2="128"/><line x1="38" y1="128" x2="32" y2="128"/></g>
+  </g>
+</svg>
