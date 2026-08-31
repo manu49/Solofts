@@ -1,92 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 200" width="480" height="200">
-  <defs>
-    <!-- Background -->
-    <rect id="bg" width="480" height="200" fill="#1A1A2E"/>
-
-    <!-- Gradient for the pin/compass mark -->
-    <radialGradient id="pinGrad" cx="50%" cy="35%" r="60%">
-      <stop offset="0%" stop-color="#FF7070"/>
-      <stop offset="100%" stop-color="#FF4D4D"/>
-    </radialGradient>
-
-    <!-- Subtle glow -->
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-
-    <filter id="softglow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="8" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
-
-  <!-- Dark background -->
-  <rect width="480" height="200" fill="#1A1A2E"/>
-
-  <!-- Subtle grid lines -->
-  <g opacity="0.04" stroke="#FFB830" stroke-width="0.5">
-    <line x1="0" y1="50" x2="480" y2="50"/>
-    <line x1="0" y1="100" x2="480" y2="100"/>
-    <line x1="0" y1="150" x2="480" y2="150"/>
-    <line x1="120" y1="0" x2="120" y2="200"/>
-    <line x1="240" y1="0" x2="240" y2="200"/>
-    <line x1="360" y1="0" x2="360" y2="200"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 72" width="196" height="72">
+  <title>SOLOFTS — compact navbar lockup</title>
+  <path d="M30 11.25 C20.7 11.25 15 17.55 15 28.2 C15 37.8 30 51.75 30 51.75 C30 51.75 45 37.8 45 28.2 C45 17.55 39.3 11.25 30 11.25 Z" fill="#FF4D4D"/>
+  <circle cx="30" cy="28.2" r="5.70" fill="#1A1A2E"/>
+  <g stroke="#FFB830" stroke-width="1.2" opacity="0.65">
+    <line x1="30" y1="8" x2="30" y2="12"/>
+    <line x1="53" y1="33" x2="57" y2="33"/>
+    <line x1="7" y1="33" x2="3" y2="33"/>
   </g>
-
-  <!-- ── MARK: Compass rose / location pin hybrid ── -->
-  <!-- Outer ring -->
-  <circle cx="52" cy="96" r="34" fill="none" stroke="#FF4D4D" stroke-width="1.5" opacity="0.25"/>
-  <circle cx="52" cy="96" r="26" fill="none" stroke="#FF4D4D" stroke-width="0.75" opacity="0.15"/>
-
-  <!-- Pin shape (teardrop) — the core mark -->
-  <path d="M52 62 C38 62 28 72 28 84 C28 100 52 122 52 122 C52 122 76 100 76 84 C76 72 66 62 52 62 Z"
-    fill="url(#pinGrad)" filter="url(#softglow)"/>
-
-  <!-- Inner circle of pin -->
-  <circle cx="52" cy="84" r="9" fill="#1A1A2E"/>
-  <circle cx="52" cy="84" r="5" fill="#FF4D4D" opacity="0.8"/>
-
-  <!-- Compass tick marks -->
-  <g stroke="#FFB830" stroke-width="1.5" opacity="0.6">
-    <!-- N -->
-    <line x1="52" y1="58" x2="52" y2="63"/>
-    <!-- S -->
-    <line x1="52" y1="129" x2="52" y2="134"/>
-    <!-- E -->
-    <line x1="82" y1="96" x2="87" y2="96"/>
-    <!-- W -->
-    <line x1="17" y1="96" x2="22" y2="96"/>
-  </g>
-
-  <!-- Tiny N label -->
-  <text x="52" y="56" text-anchor="middle" fill="#FFB830" font-family="'DM Sans', sans-serif" font-size="7" font-weight="500" letter-spacing="1" opacity="0.7">N</text>
-
-  <!-- ── WORDMARK — single text element so all letter-spacing is uniform ── -->
-  <text x="104" y="108"
-    font-family="'Bebas Neue', 'Arial Black', Impact, sans-serif"
-    font-size="72"
-    font-weight="900"
-    letter-spacing="6">
-    <tspan fill="#FFF8F0">SOL</tspan><tspan fill="#FFF8F0">O</tspan><tspan fill="#FF4D4D" filter="url(#glow)">F</tspan><tspan fill="#FFF8F0">TS</tspan>
-  </text>
-
-  <!-- Thin gold rule under wordmark -->
-  <line x1="104" y1="118" x2="424" y2="118" stroke="#FFB830" stroke-width="1" opacity="0.4"/>
-
-  <!-- Tagline -->
-  <text x="104" y="138"
-    font-family="'DM Sans', 'Helvetica Neue', Arial, sans-serif"
-    font-size="11"
-    font-weight="400"
-    letter-spacing="4.5"
-    fill="#FFF8F0"
-    opacity="0.45">SOLO FEMALE TRAVELERS</text>
-
+  <path d="M22 166V206H126V158Q126 90 183 90Q211 90 225.5 106.5Q240 123 240 160Q240 204 220.0 237.5Q200 271 146 318Q78 378 51.0 426.5Q24 475 24 536Q24 619 66.0 664.5Q108 710 188 710Q267 710 307.5 664.5Q348 619 348 534V505H244V541Q244 577 230.0 593.5Q216 610 189 610Q134 610 134 543Q134 505 154.5 472.0Q175 439 229 392Q298 332 324.0 283.0Q350 234 350 168Q350 82 307.5 36.0Q265 -10 184 -10Q104 -10 63.0 35.5Q22 81 22 166Z" transform="translate(66.00,50.00) scale(0.038000,-0.038000)" fill="#FFF8F0" />
+  <path d="M33 166V534Q33 618 76.0 664.0Q119 710 200 710Q281 710 324.0 664.0Q367 618 367 534V166Q367 82 324.0 36.0Q281 -10 200 -10Q119 -10 76.0 36.0Q33 82 33 166ZM257 159V541Q257 610 200 610Q143 610 143 541V159Q143 90 200 90Q257 90 257 159Z" transform="translate(83.14,50.00) scale(0.038000,-0.038000)" fill="#FFF8F0" />
+  <path d="M41 700H151V100H332V0H41Z" transform="translate(101.34,50.00) scale(0.038000,-0.038000)" fill="#FFF8F0" />
+  <path d="M33 166V534Q33 618 76.0 664.0Q119 710 200 710Q281 710 324.0 664.0Q367 618 367 534V166Q367 82 324.0 36.0Q281 -10 200 -10Q119 -10 76.0 36.0Q33 82 33 166ZM257 159V541Q257 610 200 610Q143 610 143 541V159Q143 90 200 90Q257 90 257 159Z" transform="translate(117.41,50.00) scale(0.038000,-0.038000)" fill="#FFF8F0" />
+  <path d="M41 700H332V600H151V405H293V305H151V0H41Z" transform="translate(135.61,50.00) scale(0.038000,-0.038000)" fill="#FF4D4D" />
+  <path d="M127 600H12V700H352V600H237V0H127Z" transform="translate(151.68,50.00) scale(0.038000,-0.038000)" fill="#FFF8F0" />
+  <path d="M22 166V206H126V158Q126 90 183 90Q211 90 225.5 106.5Q240 123 240 160Q240 204 220.0 237.5Q200 271 146 318Q78 378 51.0 426.5Q24 475 24 536Q24 619 66.0 664.5Q108 710 188 710Q267 710 307.5 664.5Q348 619 348 534V505H244V541Q244 577 230.0 593.5Q216 610 189 610Q134 610 134 543Q134 505 154.5 472.0Q175 439 229 392Q298 332 324.0 283.0Q350 234 350 168Q350 82 307.5 36.0Q265 -10 184 -10Q104 -10 63.0 35.5Q22 81 22 166Z" transform="translate(168.51,50.00) scale(0.038000,-0.038000)" fill="#FFF8F0" />
 </svg>
